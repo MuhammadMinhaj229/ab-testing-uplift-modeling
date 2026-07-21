@@ -1,59 +1,65 @@
-# End-to-End Implementation Plan & Architecture: A/B Testing & Uplift Modeling System
+# Comprehensive Implementation Plan: A/B Testing & Uplift Modeling System
 
-## 1. Project Objective (Restated)
-The objective is to transform an existing causal inference and uplift modeling prototype—designed to optimize marketing campaign targeting by identifying "Persuadables"—into a fully functional, deploy-ready, and scalable solution. This involves bridging statistical modeling with robust software engineering, scalable architecture, and actionable business insights.
+## 1. Project Objective
+Transform an existing causal inference and uplift modeling prototype into a deploy-ready, scalable production solution. This system identifies "Persuadables" to optimize marketing campaign targeting and improve ROI.
 
-## 2. Key Components of the Plan
+## 2. System Architecture & Technology Stack
+*   **Frontend (Presentation):** Streamlit (existing), Plotly for interactive dashboards.
+*   **Backend & Inference Layer:** Python 3.10+, Pandas, CausalML, EconML, Scikit-learn. Models pre-trained and saved in `models/`.
+*   **Data Layer:** In-memory pandas processing (currently), transitioning to structured data pipelines (e.g., PostgreSQL + Airflow) for production.
+*   **Infrastructure:** Docker, deployed on cloud platforms like Render or AWS ECS. CI/CD via GitHub Actions.
 
-### Phase 1: Foundation & Project Setup (Weeks 1-2)
-*   **Deliverables:** Dockerized environment, CI/CD pipeline (GitHub Actions), initialized test suite (`pytest`).
-*   **Dependencies:** Access to a sample dataset (`hillstrom_email_campaign.csv`) and clear definitions of input data schemas.
+## 3. Role-by-Role Development Roadmap
+**Phase 1: Project Setup & Baseline Integrity (Week 1)**
+*   *Software Engineer:* Dockerize the application. Initialize `pytest` in `tests/`. Setup GitHub Actions CI pipeline.
+*   *Data Analyst:* Define explicit data schemas for expected inputs (demographics, treatment flag, outcome).
+*   *Business Analyst:* Document current baseline KPIs (ROI, Cost per Conversion) to measure future success.
 
-### Phase 2: Core Engineering & Backend Modularization (Weeks 3-4)
-*   **Deliverables:** Refactored `src/` directory with object-oriented ML predictors and statistical utilities, robust error logging, and data validation (using Great Expectations or Pandera).
-*   **Dependencies:** Completion of Phase 1; stable model artifacts (`models/xlearner_model.pkl`).
+**Phase 2: Core Engineering & Backend Modularization (Weeks 2-3)**
+*   *Software Engineer:* Refactor utilities in `src/` to create object-oriented ML predictors. Implement `logging` and structured error handling.
+*   *Data Analyst:* Build ETL scripts to map raw campaign data into the required format for models in `models/`.
+*   *Business Analyst:* Define user journeys for the marketing team interacting with the Streamlit dashboard in `app/`.
 
-### Phase 3: Frontend Dashboard Refinement (Week 5)
-*   **Deliverables:** Enhanced Streamlit application (`app/streamlit_app.py`) featuring cached inference, interactive Qini curves, decile analysis, and business impact summaries.
-*   **Dependencies:** Stable backend interfaces from Phase 2.
+**Phase 3: Frontend Dashboard Refinement (Week 4)**
+*   *Software Engineer:* Refine the Streamlit application in `app/`, adding `@st.cache_data` to prevent OOM errors and improve performance.
+*   *Data Analyst:* Design the interactive Qini curve and Decile Analysis views to ensure statistical accuracy.
+*   *Business Analyst:* Conduct usability reviews with marketing to ensure "Uplift Deciles" are actionable.
 
-### Phase 4: Testing, UAT & Deployment (Week 6)
-*   **Deliverables:** Comprehensive test coverage (unit, integration), UAT sign-off from business stakeholders, and production deployment on a containerized service (e.g., Render, AWS ECS).
-*   **Dependencies:** Production environment provisioning; successful pipeline runs.
+**Phase 4: Testing, UAT & Deployment (Week 5)**
+*   *Software Engineer:* Complete unit/integration tests. Deploy the Docker container to a staging environment.
+*   *Data Analyst:* Validate output distributions (ensure predictions map logically to historical uplift).
+*   *Business Analyst:* Facilitate User Acceptance Testing (UAT) and secure Go-Live approval.
 
-## 3. High-Level Architectural Approach
+## 4. Code Organization Guidelines
+*   **`src/`:** Pure Python backend logic, statistical utilities, typed and documented with Google-style docstrings.
+*   **`app/`:** Streamlit UI components only; logic must be imported from `src/`.
+*   **`models/`:** Serialized artifacts (`.pkl`) with accompanying metadata files tracking versions and metrics.
+*   **`tests/`:** Comprehensive `pytest` test suite mirroring the `src/` structure.
 
-**Major Modules & Interactions:**
-*   **Data Ingestion & Validation Layer:** Processes raw campaign data, ensures schema compliance, and prepares features.
-*   **Inference Engine (`src/` & `models/`):** Loads pre-trained causal models (e.g., X-Learner). Exposes an interface to score incoming user batches, returning uplift deciles.
-*   **Presentation Layer (`app/`):** A Streamlit-based web application that queries the Inference Engine, aggregates the results, and displays interactive marketing KPIs.
+## 5. Testing Strategy
+*   **Unit Testing:** Validate statistical formulas and metric calculations in `src/`.
+*   **Integration Testing:** Ensure the Streamlit application in `app/` correctly interfaces with the loaded models in `models/`.
+*   **Data Validation:** Use Great Expectations/Pandera in the data pipeline to verify schema constraints before inference.
 
-**Technology Considerations:**
-*   **Backend:** Python 3.10+, Pandas, CausalML, EconML, Scikit-learn.
-*   **Frontend:** Streamlit, Plotly for visualizations.
-*   **Infrastructure:** Docker, GitHub Actions. (Future decoupling could introduce FastAPI as an independent REST API layer between the frontend and the models.)
+## 6. Deployment Plan
+*   **Environment:** Containerized via Docker using `python:3.10-slim`.
+*   **CI/CD:** GitHub Actions workflows triggered on PRs to run `pytest` and build Docker images.
+*   **Hosting:** Deploy to a managed container service (e.g., Render Web Service) to ensure scalability.
+*   **Monitoring/Rollback:** Basic health checks on port 8501. Rollbacks achieved by reverting to the previous Docker image tag.
 
-**Scalability & Security Implications:**
-*   **Scalability:** The monolithic Streamlit approach is sufficient for a few concurrent users. For high concurrency, the Inference Engine must be extracted into a standalone API (e.g., FastAPI) deployed across a load-balanced cluster. Model artifacts should be served from cloud storage rather than bundled directly.
-*   **Security:** Since this deals with customer data, the system requires strict network security (VPC), access controls (IAM), and data anonymization before ingestion. No PII should be logged.
+## 7. Business Analysis Summary
+*   **Stakeholder Needs:** Marketing requires actionable lists of "Persuadable" customers to reduce wasted spend on "Sure Things" and "Lost Causes."
+*   **Success Metrics:** +40% Improvement in Campaign ROI, -30% Cost per Conversion, 99.9% Application Uptime.
+*   **Risk & Mitigation:**
+    *   *Model Drift:* Implement quarterly retraining protocols.
+    *   *User Adoption:* Dashboard must translate complex Qini curves into simple business terms (Revenue Impact).
 
-## 4. Critical Risks, Assumptions, & Mitigation
+## 8. Data Analysis Plan
+*   **Data Sources:** Historical campaign data (e.g., sample CSV data), requiring customer attributes, treatment flags, and conversion results.
+*   **Transformation (ETL):** Impute missing values, one-hot encode categorical features, and ensure treatment/control balance.
+*   **Analytics Methods:** A/B Test Analysis (T-tests/Chi-square) for baseline significance, followed by CausalML/EconML T-Learner and X-Learner for CATE estimation.
+*   **Insights:** Outputting rank-ordered customer lists by Uplift Score deciles, feeding top deciles directly to CRM execution tools.
 
-*   **Assumption 1:** The provided data schema matches the model's expected features exactly.
-    *   *Mitigation:* Implement strict data contracts and validation at the ingestion layer before passing data to the models.
-*   **Risk 1: Model Drift & Degradation.** Customer behavior changes over time, meaning the Uplift model will lose effectiveness.
-    *   *Mitigation:* Establish a feedback loop. Continuously run a random holdout control group (10% of campaigns) to monitor real vs. predicted uplift. Set up automated model retraining triggers.
-*   **Risk 2: Performance Bottlenecks.** In-memory scoring of large datasets within Streamlit can lead to out-of-memory errors.
-    *   *Mitigation:* Use batch processing for scoring large lists offline, saving results to a database. Streamlit should query the pre-calculated database rather than inferring in real-time.
-
-## 5. Clarifying Questions
-
-1.  **Data Source Integration:** Will the production system need to pull data dynamically from a data warehouse (e.g., Snowflake, BigQuery), or will users manually upload CSV files?
-2.  **User Authentication:** Does the Streamlit dashboard require integration with a Single Sign-On (SSO) provider (e.g., Okta, Azure AD) for internal team access?
-3.  **Model Retraining Frequency:** How often does the marketing team expect the underlying X-Learner model to be retrained with new campaign data?
-
-## 6. Next Concrete Steps
-
-1.  **Align on Architecture:** Review this high-level design and answer the clarifying questions to lock in the final architecture.
-2.  **Initialize Environments:** Set up the Git repository with the proposed directory structure, create the `Dockerfile`, and configure GitHub Actions for CI.
-3.  **Data Contract Definition:** Document the exact input schema expected by the `xlearner_model.pkl` to inform data engineering tasks.
+## 9. Clarifying Questions & Next Steps
+*   **Q:** Should we proceed immediately with Phase 1 (Docker/CI/Pytest setup) as the next concrete action?
+*   **Action:** Align on this plan and begin executing the Software Engineer tasks in Phase 1.
