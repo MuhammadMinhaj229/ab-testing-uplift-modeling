@@ -221,3 +221,6 @@ streamlit run app/streamlit_app.py
 
 *Built by Mohammed Minhaj Mahmood*
 *[LinkedIn](https://linkedin.com/in/muhammadminhaj229) · [GitHub](https://github.com/MuhammadMinhaj229) · Hyderabad, India*
+## 🔗 Live Demo (Render)
+
+👉 **[Launch Campaign Simulator on Render](https://uplift-modeling-dashboard.onrender.com)**
