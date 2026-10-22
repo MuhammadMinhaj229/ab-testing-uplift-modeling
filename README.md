@@ -1,226 +1,127 @@
-# A/B Testing & Uplift Modeling System
+# Causal Uplift & Marketing ROI Optimizer
 
-![Python](https://img.shields.io/badge/Python-3.10-blue)
-![CausalML](https://img.shields.io/badge/CausalML-0.14-orange)
-![EconML](https://img.shields.io/badge/EconML-0.14-green)
-![Scipy](https://img.shields.io/badge/Scipy-1.11-purple)
-![Status](https://img.shields.io/badge/Status-Complete-brightgreen)
+[![Streamlit App](https://static.streamlit.io/badgebar/badge.svg)](https://ab-testing-uplift-modeling-preview.streamlit.app/)
+![Python](https://img.shields.io/badge/Python-3.10%2B-blue)
+![Causal ML](https://img.shields.io/badge/Causal%20ML-T--Learner%20%2F%20X--Learner-green)
+![FastAPI](https://img.shields.io/badge/FastAPI-Production%20Ready-009688)
+![Tests](https://img.shields.io/badge/Tests-Passing-brightgreen)
+![License](https://img.shields.io/badge/License-MIT-blue)
 
-> **Built a complete causal inference system: rigorous A/B test analysis
-> + T-Learner and X-Learner uplift models to identify persuadable customers,
-> achieving 41% ROI improvement over blanket campaign targeting.**
-
----
-
-## The Real Business Problem
-
-Every marketing team runs campaigns. But most campaigns are wasteful
-because they target everyone equally — including people who would have
-converted anyway, and people who will never convert no matter what.
-
-**The 4 customer types every marketer has (but doesn't know):**
-
-| Type | Would convert without campaign? | Converts with campaign? | Should you target? |
-|------|--------------------------------|-------------------------|--------------------|
-| 🟢 **Persuadables** | No | Yes | YES — this is your gold |
-|  **Sure Things** | Yes | Yes | NO — waste of budget |
-|  **Lost Causes** | No | No | NO — waste of budget |
-| 🟡 **Do Not Disturb** | Yes | No | NEVER — they'll churn if contacted |
-
-**The problem:**
-Standard A/B testing tells you IF a campaign works on average.
-It does NOT tell you WHO it works on.
-
-A campaign with 8% average uplift might have:
-- 40% uplift on Persuadables
-- 0% uplift on Sure Things
-- -15% uplift on Do Not Disturb customers
-
-Targeting everyone equally destroys ROI.
-
-**The business cost:**
-A company spending ₹50 Lakhs on a blanket campaign
-with 8% average uplift could achieve the same revenue
-impact spending only ₹18 Lakhs — by targeting only Persuadables.
-**That's ₹32 Lakhs wasted per campaign.**
+An enterprise causal inference and uplift modeling system designed to optimize promotional campaign budget allocation by isolating **Persuadable** customer cohorts and suppressing spend on **Sure Things** and **Lost Causes**.
 
 ---
 
-## The Solution This Project Builds
+## Architecture Flow
 
-### Part 1 — Rigorous A/B Test Analysis
-
-Statistical analysis of campaign results using:
-- Chi-square test for conversion rate differences
-- Two-sample t-test for revenue differences
-- Confidence intervals (95%) for all estimates
-- Power analysis — was the test properly sized?
-- Segmented analysis — does the campaign work differently
-  across age, channel, spend level?
-
-**Key question answered:** Is the campaign result real,
-or just random noise?
-
-### Part 2 — Uplift Modeling (Causal ML)
-
-Three uplift models trained and compared:
-
-**T-Learner:**
-Trains two separate models — one on treatment group,
-one on control group. Uplift = prediction_treatment - prediction_control.
-
-**X-Learner:**
-More sophisticated. Handles imbalanced treatment/control splits better.
-Uses cross-fitting to reduce bias. Best for real-world campaign data.
-
-**Uplift Random Forest:**
-Tree-based model that directly optimizes for uplift
-instead of conversion probability.
-
-### Targeting Strategy
-
-After uplift scoring, customers are ranked and split into deciles:
-
-| Decile | Avg Uplift Score | Recommended Action |
-|--------|-----------------|-------------------|
-| 1–2 (Top 20%) | +0.42 | Priority targeting — highest ROI |
-| 3–4 | +0.21 | Target if budget allows |
-| 5–6 | +0.08 | Marginal — test carefully |
-| 7–8 | -0.03 | Do not target |
-| 9–10 (Bottom 20%) | -0.19 | Never target — Do Not Disturb |
-
----
-
-## Model Performance Results
-
-| Model | AUUC Score | Qini Coefficient | vs Random Baseline |
-|-------|-----------|-----------------|-------------------|
-| Random Targeting | 0.500 | 0.000 | Baseline |
-| T-Learner | 0.681 | 0.124 | +36.2% |
-| Uplift Random Forest | 0.714 | 0.147 | +42.8% |
-| **X-Learner** | **0.739** | **0.168** | **+47.8%** |
-
----
-
-## Business Impact
-
-| Metric | Blanket Campaign | Uplift-Targeted Campaign |
-|--------|-----------------|--------------------------|
-| Customers contacted | 100,000 | 38,000 (top 2 deciles) |
-| Campaign spend | ₹50 Lakhs | ₹19 Lakhs |
-| Conversions generated | 8,000 | 6,840 |
-| Revenue generated | ₹2.4 Crores | ₹2.05 Crores |
-| **Campaign ROI** | **1.48x** | **2.08x** |
-| **Cost per conversion** | **₹625** | **₹278** |
-
-> **Targeting the top 38% of customers by uplift score delivers
-> 85.5% of the revenue at 38% of the cost — a 41% ROI improvement.**
-
----
-
-## Industries Where This System Applies
-
-| Industry | Use Case | Impact |
-|----------|----------|--------|
-| **E-Commerce** | Promotional targeting (Flipkart, Meesho) | 30–50% campaign cost reduction |
-| **Banking** | Credit card and loan campaign targeting | 2–3x improvement in approval rate |
-| **Telecom** | Upgrade and retention campaign targeting | 25–40% churn reduction cost |
-| **Insurance** | Renewal campaign optimization | 35% reduction in lapse rate |
-| **FMCG** | Trade promotion optimization | 20–30% promo ROI improvement |
-| **Healthcare** | Treatment adherence intervention | Better patient outcomes |
-| **EdTech** | Course completion intervention | Improved completion rates |
-
----
-
-## Complete Tech Stack
-
-| Category | Tool | Purpose |
-|----------|------|---------|
-| Data Processing | Python, Pandas, NumPy | Data manipulation and prep |
-| Statistical Testing | SciPy, Statsmodels | A/B test analysis, power analysis |
-| Uplift Modeling | CausalML | T-Learner, X-Learner, uplift forest |
-| Causal Inference | EconML | Double ML, CATE estimation |
-| Visualization | Plotly, Seaborn | Qini curves, uplift decile charts |
-| Dashboard | Streamlit | Interactive campaign simulator |
-
----
-
-## Project Structure
-
-ab-testing-uplift-modeling/
- data/
-    hillstrom_email_campaign.csv  # Kevin Hillstrom MineThatData dataset
- notebooks/
-    01_ab_test_analysis.ipynb     # Statistical A/B test analysis
-    02_tlearner_uplift.ipynb      # T-Learner implementation
-    03_xlearner_uplift.ipynb      # X-Learner + Uplift RF
-    04_roi_simulation.ipynb       # Business ROI calculator
- app/
-    streamlit_app.py              # Campaign targeting simulator
- src/
-    init.py
-    ab_test_utils.py              # Statistical test functions
-    uplift_evaluator.py           # Qini curve, AUUC computation
- models/
-    xlearner_model.pkl            # Best uplift model saved
- requirements.txt
- README.md
-
----
-
-## Key Technical Decisions
-
-**Why uplift modeling over standard propensity scoring?**
-Propensity models predict who will convert.
-Uplift models predict who will convert BECAUSE of the campaign.
-These are completely different questions with completely different
-business implications.
-
-**Why X-Learner over T-Learner?**
-T-Learner assumes balanced treatment and control groups.
-Real campaigns often have 80/20 or 90/10 splits.
-X-Learner is designed specifically for imbalanced data
-and consistently outperforms T-Learner in real-world tests.
-
-**Why Qini curve instead of AUC?**
-AUC measures classification performance.
-Qini curve measures incremental lift — how much additional
-conversion you get by targeting the top N% of customers.
-This directly maps to business ROI decisions.
-
----
-
-## How to Run Locally
-
-```bash
-git clone https://github.com/MuhammadMinhaj229/ab-testing-uplift-modeling.git
-cd ab-testing-uplift-modeling
-pip install -r requirements.txt
-# Run notebooks in order: 01 → 02 → 03 → 04
-streamlit run app/streamlit_app.py
+```mermaid
+flowchart TD
+    CustomerCohort["Target Audience Cohort (Features: Recency, Frequency, Spend, Engagement)"] --> CausalEngine["Two-Model T-Learner / X-Learner Causal Estimator"]
+    CausalEngine --> P0["Control Model: P(Conversion | X, Treatment=0)"]
+    CausalEngine --> P1["Treatment Model: P(Conversion | X, Treatment=1)"]
+    
+    P0 --> ITE["Individual Treatment Effect: tau(X) = P1 - P0"]
+    P1 --> ITE
+    
+    ITE --> Quadrants["Causal Segmentation Matrix"]
+    Quadrants --> Persuadables["Persuadables: High Uplift (Target Aggressively)"]
+    Quadrants --> SureThings["Sure Things: High Organic Conversion (Suppress Promo)"]
+    Quadrants --> LostCauses["Lost Causes: Low Conversion (Suppress Promo)"]
+    Quadrants --> SleepingDogs["Sleeping Dogs: Negative Uplift (Exclude Audience)"]
+    
+    Quadrants --> Qini["Cumulative Gains & Qini Curve Optimizer (AUUC 0.739)"]
+    Qini --> BudgetEngine["Dynamic Budget Allocation & ROI Curve Calculator"]
+    BudgetEngine --> Streamlit["Executive Streamlit Dashboard (app/streamlit_app.py)"]
+    BudgetEngine --> API["FastAPI REST Endpoints (src/api.py)"]
+    BudgetEngine --> Policy["Marketing Automation Rule Engine Export (JSON)"]
 ```
 
 ---
 
-## Key Findings Summary
+## The Commercial Problem: Blanket Campaigns Waste Margin
 
-- **X-Learner achieves AUUC of 0.739** — 47.8% above random baseline
-- **Top 20% of customers by uplift score** generate 52% of total campaign value
-- **Bottom 20% are Do Not Disturb** — contacting them reduces conversion by 19%
-- **Blanket campaign ROI: 1.48x** vs **Targeted campaign ROI: 2.08x**
-- **41% improvement in ROI** by targeting persuadables only
-- **₹31 Lakhs saved** per campaign on a ₹50 Lakh budget
+In digital marketing and e-commerce, offering universal discounts or blanket promotions degrades margins:
+1. **Sure Things**: Customers who intend to purchase organically. Discounting them erodes profitability without incremental volume.
+2. **Lost Causes**: Disengaged customers who will not convert despite receiving promotional incentives.
+3. **Sleeping Dogs**: Customers irritated by promotional messaging who unsubscribe or churn.
+4. **Persuadables**: The only segment whose purchase decision is directly caused by the incentive.
 
----
-
-## Live Demo
-
- **[Launch Campaign Simulator](https://ab-testing-uplift-minhaj.streamlit.app)**
+Targeting only the top 38% of customers by uplift score captures **85.5% of incremental revenue** while saving **62% of promotional expenditure**, increasing overall campaign ROI from 1.48x to 2.08x.
 
 ---
 
-*Built by Mohammed Minhaj Mahmood*
-*[LinkedIn](https://linkedin.com/in/muhammadminhaj229) · [GitHub](https://github.com/MuhammadMinhaj229) · Hyderabad, India*
-## Live Demo (Render)
+## Core Capabilities
 
- **[Launch Campaign Simulator on Render](https://uplift-modeling-dashboard.onrender.com)**
+- **Rigorous Hypothesis Testing**: Exact Chi-Square tests of independence, pooled variance proportion comparisons, and 95% confidence intervals.
+- **Two-Model T-Learner Engine**: Dual logistic / gradient-boosted estimators calculating Conditional Average Treatment Effect (CATE).
+- **Qini Curve & Area Under the Uplift Curve (AUUC)**: Evaluates incremental lift over uniform random targeting.
+- **Decision Policy Rule Generator**: Exports actionable JSON routing policies ready for integration with Braze, Klaviyo, Iterable, or customer data platforms (CDP).
+
+---
+
+## API Endpoints
+
+### 1. Health Check
+```http
+GET /health
+```
+Response:
+```json
+{
+  "status": "healthy",
+  "service": "causal-uplift-optimizer",
+  "version": "2.0.0"
+}
+```
+
+### 2. A/B Test Hypothesis Evaluation
+```http
+POST /api/v1/ab-test
+Content-Type: application/json
+
+{
+  "control_conversions": 420,
+  "control_size": 10000,
+  "treatment_conversions": 590,
+  "treatment_size": 10000,
+  "alpha": 0.05
+}
+```
+
+### 3. Uplift Campaign Optimization
+```http
+POST /api/v1/uplift-optimize
+Content-Type: application/json
+
+{
+  "audience_size": 100000,
+  "treatment_cost": 25.0,
+  "value_per_conversion": 850.0,
+  "target_fraction": 0.38
+}
+```
+
+---
+
+## Local Setup & Testing
+
+### 1. Installation
+```bash
+git clone https://github.com/MuhammadMinhaj229/ab-testing-uplift-modeling.git
+cd ab-testing-uplift-modeling
+pip install -r requirements.txt
+```
+
+### 2. Run Test Suite
+```bash
+python -m pytest tests/
+```
+
+### 3. Launch Streamlit Executive Dashboard
+```bash
+streamlit run app/streamlit_app.py
+```
+
+### 4. Launch FastAPI REST Server
+```bash
+uvicorn src.api:app --host 0.0.0.0 --port 8000 --reload
+```
