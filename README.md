@@ -1,4 +1,4 @@
-# 🧪 A/B Testing & Uplift Modeling System
+# A/B Testing & Uplift Modeling System
 
 ![Python](https://img.shields.io/badge/Python-3.10-blue)
 ![CausalML](https://img.shields.io/badge/CausalML-0.14-orange)
@@ -12,7 +12,7 @@
 
 ---
 
-## 🏢 The Real Business Problem
+## The Real Business Problem
 
 Every marketing team runs campaigns. But most campaigns are wasteful
 because they target everyone equally — including people who would have
@@ -23,8 +23,8 @@ converted anyway, and people who will never convert no matter what.
 | Type | Would convert without campaign? | Converts with campaign? | Should you target? |
 |------|--------------------------------|-------------------------|--------------------|
 | 🟢 **Persuadables** | No | Yes | YES — this is your gold |
-| 🔵 **Sure Things** | Yes | Yes | NO — waste of budget |
-| 🔴 **Lost Causes** | No | No | NO — waste of budget |
+|  **Sure Things** | Yes | Yes | NO — waste of budget |
+|  **Lost Causes** | No | No | NO — waste of budget |
 | 🟡 **Do Not Disturb** | Yes | No | NEVER — they'll churn if contacted |
 
 **The problem:**
@@ -46,7 +46,7 @@ impact spending only ₹18 Lakhs — by targeting only Persuadables.
 
 ---
 
-## 💡 The Solution This Project Builds
+## The Solution This Project Builds
 
 ### Part 1 — Rigorous A/B Test Analysis
 
@@ -91,7 +91,7 @@ After uplift scoring, customers are ranked and split into deciles:
 
 ---
 
-## 📊 Model Performance Results
+## Model Performance Results
 
 | Model | AUUC Score | Qini Coefficient | vs Random Baseline |
 |-------|-----------|-----------------|-------------------|
@@ -102,7 +102,7 @@ After uplift scoring, customers are ranked and split into deciles:
 
 ---
 
-## 📊 Business Impact
+## Business Impact
 
 | Metric | Blanket Campaign | Uplift-Targeted Campaign |
 |--------|-----------------|--------------------------|
@@ -118,7 +118,7 @@ After uplift scoring, customers are ranked and split into deciles:
 
 ---
 
-## 🌍 Industries Where This System Applies
+## Industries Where This System Applies
 
 | Industry | Use Case | Impact |
 |----------|----------|--------|
@@ -132,7 +132,7 @@ After uplift scoring, customers are ranked and split into deciles:
 
 ---
 
-## 🛠️ Complete Tech Stack
+## Complete Tech Stack
 
 | Category | Tool | Purpose |
 |----------|------|---------|
@@ -145,30 +145,30 @@ After uplift scoring, customers are ranked and split into deciles:
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ab-testing-uplift-modeling/
-├── data/
-│   └── hillstrom_email_campaign.csv  # Kevin Hillstrom MineThatData dataset
-├── notebooks/
-│   ├── 01_ab_test_analysis.ipynb     # Statistical A/B test analysis
-│   ├── 02_tlearner_uplift.ipynb      # T-Learner implementation
-│   ├── 03_xlearner_uplift.ipynb      # X-Learner + Uplift RF
-│   └── 04_roi_simulation.ipynb       # Business ROI calculator
-├── app/
-│   └── streamlit_app.py              # Campaign targeting simulator
-├── src/
-│   ├── init.py
-│   ├── ab_test_utils.py              # Statistical test functions
-│   └── uplift_evaluator.py           # Qini curve, AUUC computation
-├── models/
-│   └── xlearner_model.pkl            # Best uplift model saved
-├── requirements.txt
-└── README.md
+ data/
+    hillstrom_email_campaign.csv  # Kevin Hillstrom MineThatData dataset
+ notebooks/
+    01_ab_test_analysis.ipynb     # Statistical A/B test analysis
+    02_tlearner_uplift.ipynb      # T-Learner implementation
+    03_xlearner_uplift.ipynb      # X-Learner + Uplift RF
+    04_roi_simulation.ipynb       # Business ROI calculator
+ app/
+    streamlit_app.py              # Campaign targeting simulator
+ src/
+    init.py
+    ab_test_utils.py              # Statistical test functions
+    uplift_evaluator.py           # Qini curve, AUUC computation
+ models/
+    xlearner_model.pkl            # Best uplift model saved
+ requirements.txt
+ README.md
 
 ---
 
-## 🔑 Key Technical Decisions
+## Key Technical Decisions
 
 **Why uplift modeling over standard propensity scoring?**
 Propensity models predict who will convert.
@@ -190,7 +190,7 @@ This directly maps to business ROI decisions.
 
 ---
 
-## 🚀 How to Run Locally
+## How to Run Locally
 
 ```bash
 git clone https://github.com/MuhammadMinhaj229/ab-testing-uplift-modeling.git
@@ -202,7 +202,7 @@ streamlit run app/streamlit_app.py
 
 ---
 
-## 📈 Key Findings Summary
+## Key Findings Summary
 
 - **X-Learner achieves AUUC of 0.739** — 47.8% above random baseline
 - **Top 20% of customers by uplift score** generate 52% of total campaign value
@@ -213,14 +213,14 @@ streamlit run app/streamlit_app.py
 
 ---
 
-## 🔗 Live Demo
+## Live Demo
 
-👉 **[Launch Campaign Simulator](https://ab-testing-uplift-minhaj.streamlit.app)**
+ **[Launch Campaign Simulator](https://ab-testing-uplift-minhaj.streamlit.app)**
 
 ---
 
 *Built by Mohammed Minhaj Mahmood*
 *[LinkedIn](https://linkedin.com/in/muhammadminhaj229) · [GitHub](https://github.com/MuhammadMinhaj229) · Hyderabad, India*
-## 🔗 Live Demo (Render)
+## Live Demo (Render)
 
-👉 **[Launch Campaign Simulator on Render](https://uplift-modeling-dashboard.onrender.com)**
+ **[Launch Campaign Simulator on Render](https://uplift-modeling-dashboard.onrender.com)**
